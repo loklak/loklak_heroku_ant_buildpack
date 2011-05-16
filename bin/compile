@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+# parse args
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# chdir as maven expects
+cd $BUILD_DIR
+
+# unpack cache
+for DIR in ".m2" ".maven" ".jetty"; do
+  rm -rf $DIR
+  if [ -d $CACHE_DIR/$DIR ]; then
+    cp -r $CACHE_DIR/$DIR $DIR
+  fi
+done
+
+# install maven with base repository
+MAVEN_URL="http://s3.amazonaws.com/sclasen-langpack-java/maven-05.tar.gz"
+
+if [ ! -d .maven ]; then
+  echo -n "-----> Installing Maven..."
+  curl --silent --max-time 60 --location $MAVEN_URL | tar xz
+  chmod +x .maven/bin/mvn
+  echo " done"
+fi
+
+# build app
+echo "-----> Building app with Maven"
+BUILD_CMD="-DskipTests clean install"
+if [ -f .build ]; then
+BUILD_CMD=`cat .build`
+fi
+echo "-----> executing mvn $BUILD_CMD"
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR $BUILD_CMD 2>&1 | sed -u 's/^/       /'
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+  echo " !     Failed to build app with Maven"
+  exit 1
+fi
+
+# repack cache
+mkdir -p $CACHE_DIR
+for DIR in ".m2" ".maven" ".jetty"; do
+  rm -rf $CACHE_DIR/$DIR
+  cp -r $DIR $CACHE_DIR/$DIR
+done

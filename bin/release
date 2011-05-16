@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# bin/release <build-dir>
+
+cat <<EOF
+---
+config_vars:
+  PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
+  JETTY_HOME: .jetty
+  MAVEN_OPTS: -Xmx500m
+EOF
