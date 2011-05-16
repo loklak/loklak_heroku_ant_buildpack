@@ -23,7 +23,7 @@ done
 MAVEN_URL="http://s3.amazonaws.com/sclasen-langpack-java/maven-05.tar.gz"
 
 if [ ! -d .maven ]; then
-  echo -n "-----> Installing Maven..."
+  echo -n "-----> Installing Maven....."
   curl --silent --max-time 60 --location $MAVEN_URL | tar xz
   chmod +x .maven/bin/mvn
   echo " done"
