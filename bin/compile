@@ -30,7 +30,7 @@ if [ ! -d .maven ]; then
 fi
 
 # build app
-echo "-----> Building app with Maven"
+echo "-----> Building app with Maven..."
 BUILD_CMD="-DskipTests clean install"
 if [ -f .build ]; then
 BUILD_CMD=`cat .build`
