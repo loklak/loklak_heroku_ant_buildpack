@@ -11,8 +11,8 @@ if [ ! -f "$1/Procfile" ]; then
     WAR=`find target -name *.war`
     DEFAULT_PROCS="
 default_process_types:
-  $DEFAULT_WEB_PRE$WAR$DEFAULT_WEB_POST
-"
+  $DEFAULT_WEB_PRE$WAR$DEFAULT_WEB_POST"
+
   fi
 fi
 
