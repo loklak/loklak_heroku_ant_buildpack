@@ -11,7 +11,7 @@ if [ ! -f "$1/Procfile" ]; then
     WAR=`find $1/target -name *.war`
     DEFAULT_PROCS="
 default_process_types:
-  \"$DEFAULT_WEB_PRE$WAR$DEFAULT_WEB_POST\""
+  $DEFAULT_WEB_PRE$WAR$DEFAULT_WEB_POST"
 
   fi
 fi
@@ -22,5 +22,5 @@ cat <<EOF
 config_vars:
   PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
   JETTY_HOME: .jetty
-  MAVEN_OPTS: -Xmx500m 
+  MAVEN_OPTS: -Xmx500m $DEFAULT_PROCS
 EOF
