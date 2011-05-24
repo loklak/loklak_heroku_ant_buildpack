@@ -10,7 +10,7 @@ DEFAULT_WEB_POST=' -jar $JETTY_HOME/start.jar'
 DEFAULT_PROCS=""
 
 #If no procfile, try and detect a webapp in target.
-#IF we find a single war in target, we deploy it via vendored jetty
+#If we find a single war in target, we deploy it via vendored jetty
 if [ ! -f "$BUILD_DIR/Procfile" ]; then
   WARS=`find $1/target -name *.war | wc -l | tr -s " " | sed 's/^[ ]//g' `
   if [ "$WARS" == "1" ]; then

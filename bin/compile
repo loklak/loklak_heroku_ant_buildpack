@@ -31,12 +31,8 @@ fi
 
 # build app
 echo "-----> Building app with Maven..."
-BUILD_CMD="-DskipTests clean install"
-if [ -f .build ]; then
-BUILD_CMD=`cat .build`
-fi
-echo "-----> executing mvn $BUILD_CMD"
-.maven/bin/mvn -B -Duser.home=$BUILD_DIR $BUILD_CMD 2>&1 | sed -u 's/^/       /'
+echo "-----> executing mvn -DskipTests"
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
