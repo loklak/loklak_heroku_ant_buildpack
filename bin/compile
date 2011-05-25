@@ -39,7 +39,7 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
 fi
 
 echo "-----> executing mvn -DskipTests"
-.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests 2>&1 | sed -u 's/^/       /'
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Ppush 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
