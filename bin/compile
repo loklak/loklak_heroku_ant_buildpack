@@ -31,6 +31,13 @@ fi
 
 # build app
 echo "-----> Building app with Maven..."
+echo "-----> executing mvn clean"
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR clean 2>&1 | sed -u 's/^/       /'
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+  echo " !     Failed to clean app with Maven"
+  exit 1
+fi
+
 echo "-----> executing mvn -DskipTests"
 .maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
