@@ -35,7 +35,9 @@ if [ ! -d .opt ]; then
   mkdir .opt/bin
 fi
 
-cp $BIN_DIR/../opt/* .opt/bin
+cp $BIN_DIR/../opt/environment .opt/bin
+cp $BIN_DIR/../opt/jdyno .opt/bin
+cp $BIN_DIR/../opt/mvn .opt/bin
 
 # build app
 echo "-----> Building app with Maven..."
