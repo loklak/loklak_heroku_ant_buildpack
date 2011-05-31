@@ -4,6 +4,7 @@
 # fail fast
 set -e
 
+DIR=`dirname 0`
 # parse args
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -28,6 +29,13 @@ if [ ! -d .maven ]; then
   chmod +x .maven/bin/mvn
   echo " done"
 fi
+
+if [ ! -d .opt ]; then
+  mkdir .opt
+  mkdir .opt/bin
+fi
+
+cp $DIR/../opt/jdyno .opt/bin
 
 # build app
 echo "-----> Building app with Maven..."

@@ -26,7 +26,7 @@ fi
 cat <<EOF
 ---
 config_vars:
-  PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
+  PATH: .opt/bin:.maven/bin:/usr/local/bin:/usr/bin:/bin
   JETTY_HOME: .jetty
   MAVEN_OPTS: -Xmx500m $DEFAULT_PROCS
 addons:
