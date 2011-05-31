@@ -4,7 +4,7 @@
 # fail fast
 set -e
 
-BIN_DIR=`dirname 0`
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 # parse args
 BUILD_DIR=$1
 CACHE_DIR=$2
