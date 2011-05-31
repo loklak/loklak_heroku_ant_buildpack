@@ -29,4 +29,8 @@ config_vars:
   PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
   JETTY_HOME: .jetty
   MAVEN_OPTS: -Xmx500m $DEFAULT_PROCS
+addons:
+  shared-database:5mb
+
+
 EOF
