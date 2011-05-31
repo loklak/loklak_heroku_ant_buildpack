@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-BIN_DIR=`dirname 0`
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
 source $BIN_DIR/environment
 
