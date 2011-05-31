@@ -32,7 +32,7 @@ fi
 # build app
 echo "-----> Building app with Maven..."
 echo "-----> executing mvn -DskipTests -Pproduction clean package"
-.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Pproduction clean package 2>&1 | sed -u 's/^/       /'
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Pproduction clean dependency:resolve-plugins package 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
