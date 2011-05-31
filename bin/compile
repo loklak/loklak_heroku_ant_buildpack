@@ -4,7 +4,7 @@
 # fail fast
 set -e
 
-DIR=`dirname 0`
+BIN_DIR=`dirname 0`
 # parse args
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -35,7 +35,7 @@ if [ ! -d .opt ]; then
   mkdir .opt/bin
 fi
 
-cp $DIR/../opt/jdyno .opt/bin
+cp $BIN_DIR/../opt/* .opt/bin
 
 # build app
 echo "-----> Building app with Maven..."

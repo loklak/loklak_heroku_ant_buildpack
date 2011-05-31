@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+
+BIN_DIR=`dirname 0`
+
+source $BIN_DIR/environment
+
+$PWD/.mvn/bin/mvn "$@"

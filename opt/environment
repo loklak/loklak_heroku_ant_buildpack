@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -n "$DATABASE_URL" ]; then
+ export      JDBC_URL=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/jdbc\:postgresql\:\/\/$3\/$4\?user\=$1\&password\=$2/'`
+ export     JDBC_HOST=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$3/'`
+ export     JDBC_USER=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$1/'`
+ export JDBC_PASSWORD=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$2/'`
+ export   JDBC_DBNAME=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$4/'`
+fi
