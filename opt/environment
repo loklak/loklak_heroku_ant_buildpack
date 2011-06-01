@@ -7,3 +7,14 @@ if [ -n "$DATABASE_URL" ]; then
  export JDBC_PASSWORD=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$2/'`
  export   JDBC_DBNAME=`echo $DATABASE_URL | perl -p -e 's/postgres\:\/\/(.+)\:(.+)\@(.+)\/(.+)/$4/'`
 fi
+
+
+if [ -n "$RABBITMQ_URL" ]; then
+ export      RABBIT_HOST=`echo $RABBIT_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$3/'`
+ export      RABBIT_PORT=`echo $RABBIT_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$4/'`
+ export      RABBIT_USER=`echo $RABBIT_URL | perl -p -e  's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$1/'`
+ export  RABBIT_PASSWORD=`echo $RABBIT_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$2/'`
+ export     RABBIT_VHOST=`echo $RABBIT_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$5/'`
+fi
+
+
