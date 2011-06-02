@@ -10,11 +10,11 @@ fi
 
 
 if [ -n "$RABBITMQ_URL" ]; then
- export      RABBIT_HOST=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$3/'`
- export      RABBIT_PORT=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$4/'`
- export      RABBIT_USER=`echo $RABBITMQ_URL | perl -p -e  's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$1/'`
- export  RABBIT_PASSWORD=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$2/'`
- export     RABBIT_VHOST=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)\/(.+)/$5/'`
+ export      RABBIT_HOST=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)(\/.+)/$3/'`
+ export      RABBIT_PORT=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)(\/.+)/$4/'`
+ export      RABBIT_USER=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)(\/.+)/$1/'`
+ export  RABBIT_PASSWORD=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)(\/.+)/$2/'`
+ export     RABBIT_VHOST=`echo $RABBITMQ_URL | perl -p -e 's/amqp\:\/\/(.+)\:(.+)\@(.+)\:(.+)(\/.+)/$5/'`
 fi
 
 
