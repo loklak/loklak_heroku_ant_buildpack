@@ -60,7 +60,7 @@ fi
 
 # repack cache
 mkdir -p $CACHE_DIR
-for DIR in ".m2" ".maven" ".jetty"; do
+for DIR in ".m2" ".maven" ; do
   rm -rf $CACHE_DIR/$DIR
   cp -r $DIR $CACHE_DIR/$DIR
 done
