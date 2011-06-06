@@ -28,7 +28,7 @@ done
 # TODO: Only conditionally overwrite .server. For now we always overwrite
 # So we get latest changes from language pack on each build
 
-cp -R opt/server .server
+cp -R $BIN_DIR/../opt/server .server
 
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
