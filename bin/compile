@@ -9,11 +9,14 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+JETTY_WRAPPER_REPO="https://jesperfj@github.com/jesperfj/embedded-jetty.git"
+
+
 # chdir as maven expects
 cd $BUILD_DIR
 
 # unpack cache
-for DIR in ".m2" ".maven" ".jetty"; do
+for DIR in ".m2" ".maven" ; do
   rm -rf $DIR
   if [ -d $CACHE_DIR/$DIR ]; then
     cp -r $CACHE_DIR/$DIR $DIR
@@ -21,7 +24,7 @@ for DIR in ".m2" ".maven" ".jetty"; do
 done
 
 # install maven with base repository
-MAVEN_URL="http://s3.amazonaws.com/sclasen-langpack-java/maven-05.tar.gz"
+MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
 
 if [ ! -d .maven ]; then
   echo -n "-----> Installing Maven....."
@@ -30,22 +33,29 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
-if [ ! -d .opt ]; then
-  mkdir .opt
-  mkdir .opt/bin
+if [ ! -d .server ] ; then
+  git clone $JETTY_WRAPPER_REPO .server
+  echo "-----> Adding Jetty wrapper from $JETTY_WRAPPER_REPO"
+else
+  (cd .server ; git pull)
+  echo "-----> Updated Jetty wrapper repo from $JETTY_WRAPPER_REPO"
 fi
 
-cp $BIN_DIR/../opt/environment .opt/bin
-cp $BIN_DIR/../opt/jdyno .opt/bin
-cp $BIN_DIR/../opt/mvn .opt/bin
 
 # build app
-echo "-----> Building app with Maven..."
-echo "-----> executing mvn -DskipTests -Pproduction clean package"
-.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Pproduction clean package 2>&1 | sed -u 's/^/       /'
+echo "-----> Building web app and Jetty wrapper with Maven..."
+echo "-----> executing mvn -DskipTests -Pproduction -f .server/pom.xml clean package"
+.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Pproduction -f .server/pom.xml clean package 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
+fi
+
+if [ ! -e "Procfile" ] ; then
+  WAR_FILE=`find target -name *.war`
+  PROC="web:    java -cp `cat .server/runjetty/target/cp`:.server/runjetty/target/classes RunJetty $WAR_FILE`"
+  echo $PROC > Procfile
+  echo "-----> No Procfile found. Generating Procfile as:\n$PROC"
 fi
 
 # repack cache
