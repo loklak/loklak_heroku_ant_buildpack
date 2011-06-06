@@ -9,10 +9,11 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+echo $BUILD_DIR
+
+echo $CACHE_DIR
+
 # Once stable, we should probably not pull dynamically
-
-JETTY_WRAPPER_REPO="git://github.com/jesperfj/embedded-jetty.git"
-
 
 # chdir as maven expects
 cd $BUILD_DIR
@@ -39,19 +40,6 @@ if [ ! -d .maven ]; then
   chmod +x .maven/bin/mvn
   echo " done"
 fi
-
-#if [ ! -d .server ] ; then
-#  git clone $JETTY_WRAPPER_REPO .server
-#  echo "-----> Adding Jetty wrapper from $JETTY_WRAPPER_REPO"
-#else
-
-# TODO: Maybe we don't do this, in case where developer includes .server.
-# Depends if we believe that's a whole different language pack
-#
-#  (cd .server ; git pull)
-#  echo "-----> Updated Jetty wrapper repo from $JETTY_WRAPPER_REPO"
-#fi
-
 
 # build app
 BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=/app/.m2/repository -DskipTests -f .server/pom.xml clean package"
