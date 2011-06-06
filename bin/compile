@@ -9,7 +9,7 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-JETTY_WRAPPER_REPO="https://jesperfj@github.com/jesperfj/embedded-jetty.git"
+JETTY_WRAPPER_REPO="git://github.com/jesperfj/embedded-jetty.git"
 
 
 # chdir as maven expects
