@@ -11,17 +11,15 @@ public class RunJetty
 
         Connector connector = new SelectChannelConnector();
         connector.setPort(Integer.getInteger("jetty.port",8080).intValue());
-        server.setConnectors(new Connector[]
-        { connector });
-
-        String war = args.length > 0?args[0]: "../test-jetty-webapp/target/test-jetty-webapp-" + Server.getVersion();
-        String path = args.length > 1?args[1]:"/";
-
-        System.err.println(war + " " + path);
+        server.setConnectors(new Connector[] { connector });
+	if(args.length<1) {
+            System.out.println("Missing required argument: path_to_war_file");
+            System.exit(1);
+        }
 
         WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath(path);
-        webapp.setWar(war);
+        webapp.setContextPath("/");
+        webapp.setWar(args[0]);
 
         server.setHandler(webapp);
 
