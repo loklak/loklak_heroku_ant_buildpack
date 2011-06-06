@@ -69,7 +69,7 @@ fi
 
 if [ ! -e "Procfile" ] ; then
   WAR_FILE=`find target -name *.war`
-  PROC="web:    java -Xmx512m -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
+  PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
   echo $PROC > Procfile
   echo "-----> No Procfile found. Generating Procfile as:"
   echo "       $PROC"
