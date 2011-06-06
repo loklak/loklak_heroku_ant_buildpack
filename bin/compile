@@ -53,7 +53,7 @@ fi
 
 if [ ! -e "Procfile" ] ; then
   WAR_FILE=`find target -name *.war`
-  PROC="web:    java -cp `cat .server/runjetty/target/cp`:.server/runjetty/target/classes RunJetty $WAR_FILE`"
+  PROC="web:    java -cp \`cat .server/runjetty/target/cp\`:.server/runjetty/target/classes RunJetty $WAR_FILE"
   echo $PROC > Procfile
   echo "-----> No Procfile found. Generating Procfile as:\n$PROC"
 fi
