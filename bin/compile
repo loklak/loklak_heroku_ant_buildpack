@@ -18,12 +18,17 @@ JETTY_WRAPPER_REPO="git://github.com/jesperfj/embedded-jetty.git"
 cd $BUILD_DIR
 
 # unpack cache
-for DIR in ".m2" ".maven" ; do
+for DIR in ".m2" ".maven" ".server" ; do
   rm -rf $DIR
   if [ -d $CACHE_DIR/$DIR ]; then
     cp -r $CACHE_DIR/$DIR $DIR
   fi
 done
+
+# TODO: Only conditionally overwrite .server. For now we always overwrite
+# So we get latest changes from language pack on each build
+
+cp -R opt/server .server
 
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
@@ -35,29 +40,32 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
-if [ ! -d .server ] ; then
-  git clone $JETTY_WRAPPER_REPO .server
-  echo "-----> Adding Jetty wrapper from $JETTY_WRAPPER_REPO"
-else
+#if [ ! -d .server ] ; then
+#  git clone $JETTY_WRAPPER_REPO .server
+#  echo "-----> Adding Jetty wrapper from $JETTY_WRAPPER_REPO"
+#else
 
 # TODO: Maybe we don't do this, in case where developer includes .server.
 # Depends if we believe that's a whole different language pack
-
-  (cd .server ; git pull)
-  echo "-----> Updated Jetty wrapper repo from $JETTY_WRAPPER_REPO"
-fi
+#
+#  (cd .server ; git pull)
+#  echo "-----> Updated Jetty wrapper repo from $JETTY_WRAPPER_REPO"
+#fi
 
 
 # build app
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=/app/.m2/repository -DskipTests -f .server/pom.xml clean package"
 echo "-----> Building web app and Jetty wrapper with Maven..."
-echo "-----> executing mvn -DskipTests -f .server/pom.xml clean package"
-.maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -f .server/pom.xml clean package 2>&1 | sed -u 's/^/       /'
+echo "-----> executing $BUILDCMD"
+
+$BUILDCMD 2>&1 | sed -u 's/^/       /'
+
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
 fi
 
-# The Java heap should be readable from environment.
+# TODO: The Java heap should be readable from environment.
 
 if [ ! -e "Procfile" ] ; then
   WAR_FILE=`find target -name *.war`
@@ -70,7 +78,7 @@ fi
 
 # repack cache
 mkdir -p $CACHE_DIR
-for DIR in ".m2" ".maven" ; do
+for DIR in ".m2" ".maven" ".server" ; do
   rm -rf $CACHE_DIR/$DIR
   cp -r $DIR $CACHE_DIR/$DIR
 done
