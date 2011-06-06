@@ -44,7 +44,7 @@ fi
 
 # build app
 echo "-----> Building web app and Jetty wrapper with Maven..."
-echo "-----> executing mvn -DskipTests -Pproduction -f .server/pom.xml clean package"
+echo "-----> executing mvn -DskipTests -f .server/pom.xml clean package"
 .maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests -Pproduction -f .server/pom.xml clean package 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
