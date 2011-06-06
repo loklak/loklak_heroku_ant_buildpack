@@ -2,7 +2,7 @@
 # bin/use <build-dir>
 
 if [ -f $1/pom.xml ]; then
-  if grep "<packaging>war</packaging>" ; then
+  if grep "<packaging>war</packaging> pom.xml" ; then
     echo "Java" && exit 0
   else
     echo "no" && exit 1
