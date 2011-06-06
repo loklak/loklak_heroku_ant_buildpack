@@ -9,6 +9,8 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+# Once stable, we should probably not pull dynamically
+
 JETTY_WRAPPER_REPO="git://github.com/jesperfj/embedded-jetty.git"
 
 
@@ -37,6 +39,10 @@ if [ ! -d .server ] ; then
   git clone $JETTY_WRAPPER_REPO .server
   echo "-----> Adding Jetty wrapper from $JETTY_WRAPPER_REPO"
 else
+
+# TODO: Maybe we don't do this, in case where developer includes .server.
+# Depends if we believe that's a whole different language pack
+
   (cd .server ; git pull)
   echo "-----> Updated Jetty wrapper repo from $JETTY_WRAPPER_REPO"
 fi
@@ -51,11 +57,15 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   exit 1
 fi
 
+# The Java heap should be readable from environment.
+
 if [ ! -e "Procfile" ] ; then
   WAR_FILE=`find target -name *.war`
-  PROC="web:    java -cp \`cat .server/runjetty/target/cp\`:.server/runjetty/target/classes RunJetty $WAR_FILE"
+  PROC="web:    java -Xmx512m -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
   echo $PROC > Procfile
-  echo "-----> No Procfile found. Generating Procfile as:\n$PROC"
+  echo "-----> No Procfile found. Generating Procfile as:"
+  echo "       $PROC"
+
 fi
 
 # repack cache
