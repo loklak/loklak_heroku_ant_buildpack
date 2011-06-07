@@ -3,31 +3,10 @@
 
 BUILD_DIR=$1
 
-DEFAULT_WEB_PRE='web: java -Xmx512m -Djetty.port=$PORT -Djetty.home=$JETTY_HOME -Dweb.app='
-
-DEFAULT_WEB_POST=' -jar $JETTY_HOME/start.jar'
-
-DEFAULT_PROCS=""
-
-#If no procfile, try and detect a webapp in target.
-#If we find a single war in target, we deploy it via vendored jetty
-if [ ! -f "$BUILD_DIR/Procfile" ]; then
-  WARS=`find $1/target -name *.war | wc -l | tr -s " " | sed 's/^[ ]//g' `
-  if [ "$WARS" == "1" ]; then
-    WAR=`find $BUILD_DIR/target -name *.war  | awk '{sub(a,b);print}' a="$BUILD_DIR" b="."`
-    DEFAULT_PROCS="
-default_process_types:
-  $DEFAULT_WEB_PRE$WAR$DEFAULT_WEB_POST"
-
-  fi
-fi
-
-
 cat <<EOF
 ---
 config_vars:
   PATH: .opt/bin:.maven/bin:/usr/local/bin:/usr/bin:/bin
-  JETTY_HOME: .jetty
   MAVEN_OPTS: -Xmx500m $DEFAULT_PROCS
 addons:
   shared-database:5mb

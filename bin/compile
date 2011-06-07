@@ -9,12 +9,6 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-echo $BUILD_DIR
-
-echo $CACHE_DIR
-
-# Once stable, we should probably not pull dynamically
-
 # chdir as maven expects
 cd $BUILD_DIR
 
@@ -41,8 +35,19 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
+# Hack to get the right mavenCache location when running slug-compiler locally 
+
+if [[ $BUILD_DIR =~ ^/.* ]] ; then
+# if absolute path, we assume we're in the cloud
+    MAVEN_CACHE=/app/.m2/repository
+else
+# otherwise slug compiler is running locally.
+# This hack obviously fails if you use an absolute path locally. Better suggestions welcome.
+    MAVEN_CACHE=`pwd`/.m2/repository
+fi
+
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=/app/.m2/repository -DskipTests -f .server/pom.xml clean package"
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f .server/pom.xml clean package"
 echo "-----> Building web app and Jetty wrapper with Maven..."
 echo "-----> executing $BUILDCMD"
 
@@ -56,6 +61,7 @@ fi
 # TODO: The Java heap should be readable from environment.
 
 if [ ! -e "Procfile" ] ; then
+# TODO: Polish a bit more. But don't think we want to parse pom.xml to find out the war name
   WAR_FILE=`find target -name *.war`
   PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
   echo $PROC > Procfile
