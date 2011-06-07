@@ -5,7 +5,7 @@
 
 if [ -f $1/pom.xml ]; then
   if (grep -q "<packaging>war</packaging>" $1/pom.xml) ; then
-    echo "Java Web App" && exit 0
+    echo "Java web" && exit 0
   else
     echo "no" && exit 1
   fi
