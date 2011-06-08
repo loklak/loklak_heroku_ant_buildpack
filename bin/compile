@@ -20,10 +20,11 @@ for DIR in ".m2" ".maven" ".server" ; do
   fi
 done
 
-# TODO: Only conditionally overwrite .server. For now we always overwrite
-# So we get latest changes from language pack on each build
+# .server may already exist from a previous build or have been provided by the developer
 
-cp -R $BIN_DIR/../opt/server .server
+if [ ! -d .server ]; then
+    cp -R $BIN_DIR/../opt/server .server
+fi
 
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
