@@ -13,7 +13,7 @@ CACHE_DIR=$2
 cd $BUILD_DIR
 
 # unpack cache
-for DIR in ".m2" ".maven" ".server" ; do
+for DIR in ".m2" ".maven" ; do
   rm -rf $DIR
   if [ -d $CACHE_DIR/$DIR ]; then
     cp -r $CACHE_DIR/$DIR $DIR
@@ -73,7 +73,7 @@ fi
 
 # repack cache
 mkdir -p $CACHE_DIR
-for DIR in ".m2" ".maven" ".server" ; do
+for DIR in ".m2" ".maven" ; do
   rm -rf $CACHE_DIR/$DIR
   cp -r $DIR $CACHE_DIR/$DIR
 done
