@@ -1,0 +1,1 @@
+This is the Java Web App Language Pack
