@@ -22,10 +22,6 @@ done
 
 # .server may already exist from a previous build or have been provided by the developer
 
-if [ ! -d .server ]; then
-    cp -R $BIN_DIR/../opt/server .server
-fi
-
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
 
@@ -34,6 +30,18 @@ if [ ! -d .maven ]; then
   curl --silent --max-time 60 --location $MAVEN_URL | tar xz
   chmod +x .maven/bin/mvn
   echo " done"
+fi
+
+MAIN_POM="pom.xml"
+
+if (mvn help:evaluate -Dexpression=project.packaging | grep -s ^war) then
+  MAIN_POM=".server/pom.xml"
+  echo "-----> Web project detected. Looking for .server directory..."
+  if [ ! -d .server ]; then
+    cp -R $BIN_DIR/../opt/server .server
+    echo "       Not found. Adding default Jetty wrapper in .server directory. For source code see https://github.com/jesperfj/embedded-jetty"
+  fi
+  echo "       Building from .server/pom.xml"
 fi
 
 # Hack to get the right mavenCache location when running slug-compiler locally 
@@ -48,8 +56,7 @@ else
 fi
 
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f .server/pom.xml clean package"
-echo "-----> Building web app and Jetty wrapper with Maven..."
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f $MAIN_POM clean package"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'

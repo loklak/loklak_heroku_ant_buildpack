@@ -4,11 +4,12 @@
 # TODO: Use awk or other tool to perform the war packaging check with newline and whitespaces ignored.
 
 if [ -f $1/pom.xml ]; then
-  if (grep -q "<packaging>war</packaging>" $1/pom.xml) ; then
-    echo "Java web" && exit 0
-  else
-    echo "no" && exit 1
-  fi
+   echo "Java" && exit 0
+#  if (grep -q "<packaging>war</packaging>" $1/pom.xml) ; then
+#    echo "Java web" && exit 0
+#  else
+#    echo "no" && exit 1
+#  fi
 else
   echo "no" && exit 1
 fi
