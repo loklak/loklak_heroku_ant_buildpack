@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-
-BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
-
-source $BIN_DIR/environment
-
-$BIN_DIR/../../.maven/bin/mvn "$@"
