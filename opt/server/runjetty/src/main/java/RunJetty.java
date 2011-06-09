@@ -11,7 +11,7 @@ public class RunJetty
     {
         Server server = new Server();
         String dburl = System.getenv("DATABASE_URL");
-        if(dburl!=null and dburl.startsWith("postgres://") {
+        if(dburl!=null && dburl.startsWith("postgres://")) {
         	String[] s = dburl.split("://");
         	String[] s2 = s[1].split("@");
         	String[] s3 = s2[0].split(":");
