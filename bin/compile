@@ -34,7 +34,7 @@ fi
 
 MAIN_POM="pom.xml"
 
-if (.maven/bin/mvn help:evaluate -Dexpression=project.packaging | grep -s ^war) then
+if (.maven/bin/mvn help:evaluate -Dexpression=project.packaging | grep -q ^war) then
   WAR_PACKAGING=true
   MAIN_POM=".server/pom.xml"
   echo "-----> Web project detected. Looking for .server directory..."

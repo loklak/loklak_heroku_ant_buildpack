@@ -8,6 +8,11 @@
         <mavenCache>${user.home}/.m2/repository</mavenCache>
     </properties>
     <dependencies> 
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.4-701.jdbc4</version>
+        </dependency>
         <dependency> 
             <groupId>org.eclipse.jetty</groupId> 
             <artifactId>jetty-server</artifactId> 
