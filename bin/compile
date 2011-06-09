@@ -35,6 +35,7 @@ fi
 MAIN_POM="pom.xml"
 
 if (mvn help:evaluate -Dexpression=project.packaging | grep -s ^war) then
+  WAR_PACKAGING=true
   MAIN_POM=".server/pom.xml"
   echo "-----> Web project detected. Looking for .server directory..."
   if [ ! -d .server ]; then
@@ -68,7 +69,7 @@ fi
 
 # TODO: The Java heap should be readable from environment.
 
-if [ ! -e "Procfile" ] ; then
+if [ ! -e "Procfile" ] && [ -n "$WAR_PACKAGING" ] ; then
 # TODO: Polish a bit more. But don't think we want to parse pom.xml to find out the war name
   WAR_FILE=`find target -name *.war`
   PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
