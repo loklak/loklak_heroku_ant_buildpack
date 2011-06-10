@@ -57,7 +57,7 @@ else
 fi
 
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f $MAIN_POM clean package"
+BUILDCMD=".maven/bin/mvn -B -s opt/settings.xml -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f $MAIN_POM clean package"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'
