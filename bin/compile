@@ -20,8 +20,6 @@ for DIR in ".m2" ".maven" ; do
   fi
 done
 
-# .server may already exist from a previous build or have been provided by the developer
-
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
 
@@ -34,15 +32,21 @@ fi
 cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
 MAIN_POM="pom.xml"
 
+echo -n "-----> Detecting maven packaging type....."
 if (.maven/bin/mvn help:evaluate -Dexpression=project.packaging | grep -q ^war) then
   WAR_PACKAGING=true
-  MAIN_POM=".server/pom.xml"
-  echo "-----> Web project detected. Looking for .server directory..."
-  if [ ! -d .server ]; then
-    cp -R $BIN_DIR/../opt/server .server
-    echo "       Not found. Adding default Jetty wrapper in .server directory. For source code see https://github.com/jesperfj/embedded-jetty"
-  fi
-  echo "       Building from .server/pom.xml"
+  MAIN_POM="webserver/pom.xml"
+  echo " done. \"war\" packaging detected."
+  echo "       Building from webserver/pom.xml"
+
+  if [ ! -d webserver ]; then
+    cp -R $BIN_DIR/../opt/server webserver
+    echo "       No webserver directory found in project."
+    echo "       Adding embedded Jetty https://github.com/jesperfj/embedded-jetty"
+  fi 
+else
+  echo " done. Standard Java project detected (non-web project)"
+  echo "       Building from pom.xml"
 fi
 
 # Hack to get the right mavenCache location when running slug-compiler locally 
@@ -85,3 +89,4 @@ for DIR in ".m2" ".maven" ; do
   rm -rf $CACHE_DIR/$DIR
   cp -r $DIR $CACHE_DIR/$DIR
 done
+
