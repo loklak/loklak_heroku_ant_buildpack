@@ -76,7 +76,7 @@ fi
 if [ ! -e "Procfile" ] && [ -n "$WAR_PACKAGING" ] ; then
 # TODO: Polish a bit more. But don't think we want to parse pom.xml to find out the war name
   WAR_FILE=`find target -name *.war`
-  PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar .server/runjetty/target/RunJetty.jar $WAR_FILE"
+  PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar webserver/runjetty/target/RunJetty.jar $WAR_FILE"
   echo $PROC > Procfile
   echo "-----> No Procfile found. Generating Procfile as:"
   echo "       $PROC"
