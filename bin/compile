@@ -30,7 +30,7 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
-MAVEN_OPTS="-Xmx512m"
+export MAVEN_OPTS="-Xmx512m"
 
 cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
 MAIN_POM="pom.xml"
