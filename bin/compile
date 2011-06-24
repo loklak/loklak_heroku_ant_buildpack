@@ -33,21 +33,9 @@ fi
 export MAVEN_OPTS="-Xmx512m"
 
 cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
-MAIN_POM="pom.xml"
-
-# Hack to get the right mavenCache location when running slug-compiler locally 
-
-if [[ $BUILD_DIR =~ ^/.* ]] ; then
-# if absolute path, we assume we're in the cloud
-    MAVEN_CACHE=/app/.m2/repository
-else
-# otherwise slug compiler is running locally.
-# This hack obviously fails if you use an absolute path locally. Better suggestions welcome.
-    MAVEN_CACHE=`pwd`/.m2/repository
-fi
 
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests clean package"
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'
