@@ -7,7 +7,7 @@ cat <<EOF
 ---
 config_vars:
   PATH: .opt/bin:.maven/bin:/usr/local/bin:/usr/bin:/bin
-  MAVEN_OPTS: -Xmx500m $DEFAULT_PROCS
+  REPO: /app/.m2/repository
 addons:
   shared-database:5mb
 

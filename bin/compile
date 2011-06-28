@@ -33,38 +33,9 @@ fi
 export MAVEN_OPTS="-Xmx512m"
 
 cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
-MAIN_POM="pom.xml"
-
-echo -n "-----> Detecting maven packaging type....."
-if (.maven/bin/mvn help:evaluate -Dexpression=project.packaging | grep -q ^war) then
-  WAR_PACKAGING=true
-  MAIN_POM="webserver/pom.xml"
-  echo " done. \"war\" packaging detected."
-  echo "       Building from webserver/pom.xml"
-
-  if [ ! -d webserver ]; then
-    cp -R $BIN_DIR/../opt/server webserver
-    echo "       No webserver directory found in project."
-    echo "       Adding embedded Jetty https://github.com/jesperfj/embedded-jetty"
-  fi 
-else
-  echo " done. Standard Java project detected (non-web project)"
-  echo "       Building from pom.xml"
-fi
-
-# Hack to get the right mavenCache location when running slug-compiler locally 
-
-if [[ $BUILD_DIR =~ ^/.* ]] ; then
-# if absolute path, we assume we're in the cloud
-    MAVEN_CACHE=/app/.m2/repository
-else
-# otherwise slug compiler is running locally.
-# This hack obviously fails if you use an absolute path locally. Better suggestions welcome.
-    MAVEN_CACHE=`pwd`/.m2/repository
-fi
 
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DmavenCache=$MAVEN_CACHE -DskipTests -f $MAIN_POM clean package"
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'
@@ -72,18 +43,6 @@ $BUILDCMD 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Maven"
   exit 1
-fi
-
-# TODO: The Java heap should be readable from environment.
-
-if [ ! -e "Procfile" ] && [ -n "$WAR_PACKAGING" ] ; then
-# TODO: Polish a bit more. But don't think we want to parse pom.xml to find out the war name
-  WAR_FILE=`find target -name *.war`
-  PROC="web:    java -Xmx512m -Djetty.port=\$PORT -jar webserver/runjetty/target/RunJetty.jar $WAR_FILE"
-  echo $PROC > Procfile
-  echo "-----> No Procfile found. Generating Procfile as:"
-  echo "       $PROC"
-
 fi
 
 # repack cache
