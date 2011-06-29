@@ -71,48 +71,48 @@
       <id>centralMirror</id>
       <mirrorOf>central</mirrorOf>
       <name>central</name>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
     </mirror>
     <mirror>
       <id>spring-maven-release</id>
       <mirrorOf>spring-maven-release</mirrorOf>
       <name>Spring Maven Release Repository</name>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
     </mirror>
     <mirror>
       <id>spring-maven-milestone</id>
       <mirrorOf>spring-maven-milestone</mirrorOf>
       <name>Spring Maven Milestone Repository</name>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
     </mirror>
     <mirror>
       <id>spring-roo-mirror</id>
       <mirrorOf>spring-roo-mirror</mirrorOf>
       <name>Spring Roo Repository</name>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
     </mirror>
     <mirror>
       <mirrorOf>JBoss Repo</mirrorOf>
       <id>JBoss Repo</id>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
       <name>JBoss Repo</name>
     </mirror>
     <mirror>
       <mirrorOf>com.force.maven.snapshot</mirrorOf>
       <id>com.force.maven.snapshot</id>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
       <name>com.force.maven.snapshot</name>
     </mirror>
     <mirror>
       <mirrorOf>com.force.maven.release</mirrorOf>
       <id>com.force.maven.release</id>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
       <name>com.force.maven.release</name>
     </mirror>
     <mirror>
       <mirrorOf>DataNucleus_2</mirrorOf>
       <id>DataNucleus_2</id>
-      <url>http://maven-s3pository.herokuapp.com/all/</url>
+      <url>http://50.19.224.109/content/groups/public/</url>
       <name>DataNucleus_2</name>
     </mirror>
   </mirrors>
