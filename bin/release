@@ -9,7 +9,7 @@ config_vars:
   PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
   REPO: /app/.m2/repository
   JAVA_OPTS: -Xmx384m -Xss256k -XX:+UseCompressedOops
-  SBT_OPTS: -Xmx384m -Xss256k -XX:+UseCompressedOops 
+  MAVEN_OPTS: -Xmx384m -Xss256k -XX:+UseCompressedOops 
 addons:
   shared-database:5mb
 
