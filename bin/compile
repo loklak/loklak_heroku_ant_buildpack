@@ -35,7 +35,7 @@ export MAVEN_OPTS="-Xmx512m"
 cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
 
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests clean install"
+BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.test.skip=true clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'
