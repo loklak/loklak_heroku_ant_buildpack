@@ -30,9 +30,17 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
+MAVEN_SETTINGS_URL="http://s3.amazonaws.com/sclasen-langpack-java/settings.xml"
+
+echo -n "-----> Installing settings.xml....."
+if [ -f .m2/settings.xml ]; then
+  rm .m2/settings.xml 
+fi
+curl --silent --max-time 10 --location $MAVEN_SETTINGS_URL --output .m2/settings.xml
+echo " done"
+
 export MAVEN_OPTS="-Xmx512m"
 
-cp $BIN_DIR/../opt/settings.xml .m2/settings.xml
 
 # build app
 BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -DskipTests=true clean install"
