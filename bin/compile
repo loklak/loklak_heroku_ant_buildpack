@@ -21,7 +21,7 @@ for DIR in ".m2" ".maven" ; do
 done
 
 # install maven with base repository
-MAVEN_URL="http://s3.amazonaws.com/langpack-java/maven-04.tar.gz"
+MAVEN_URL="http://s3.amazonaws.com/sclasen-langpack-java/maven.tar.gz"
 
 if [ ! -d .maven ]; then
   echo -n "-----> Installing Maven 3.0.3....."
