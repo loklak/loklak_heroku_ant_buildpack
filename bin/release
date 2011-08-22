@@ -8,8 +8,8 @@ cat <<EOF
 config_vars:
   PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
   REPO: /app/.m2/repository
-  JAVA_OPTS: -Xmx384m -Xss256k -XX:+UseCompressedOops
-  MAVEN_OPTS: -Xmx384m -Xss256k -XX:+UseCompressedOops 
+  JAVA_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops
+  MAVEN_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops 
 addons:
   shared-database:5mb
 
