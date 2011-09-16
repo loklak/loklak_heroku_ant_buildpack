@@ -6,8 +6,7 @@ BUILD_DIR=$1
 cat <<EOF
 ---
 config_vars:
-  PATH: .maven/bin:/usr/local/bin:/usr/bin:/bin
-  REPO: /app/.m2/repository
+  PATH: /usr/local/bin:/usr/bin:/bin
   JAVA_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops
   MAVEN_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops 
 addons:

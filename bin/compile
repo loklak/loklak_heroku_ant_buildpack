@@ -9,16 +9,23 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-# chdir as maven expects
-cd $BUILD_DIR
+KEEP_M2_CACHE="true"
 
-# unpack cache
-for DIR in ".m2" ".maven" ; do
-  rm -rf $DIR
-  if [ -d $CACHE_DIR/$DIR ]; then
-    cp -r $CACHE_DIR/$DIR $DIR
-  fi
-done
+if [ ! -d $CACHE_DIR ]; then
+  KEEP_M2_CACHE="false"
+elif [ -f $CACHE_DIR/removeM2Cache ]; then
+  KEEP_M2_CACHE="false"
+fi
+
+if [ "true" == $KEEP_M2_CACHE ]; then
+  logger "warning: keeping m2 repo and maven in legacy application"
+fi
+
+#create the cache dir if it doesn't exist
+mkdir -p $CACHE_DIR
+
+# change to cache dir to install maven
+cd $CACHE_DIR
 
 # install maven with base repository
 MAVEN_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/maven.tar.gz"
@@ -39,11 +46,13 @@ fi
 curl --silent --max-time 10 --location $MAVEN_SETTINGS_URL --output .m2/settings.xml
 echo " done"
 
+# change to build dir to run maven
+cd $BUILD_DIR
+
 export MAVEN_OPTS="-Xmx512m"
 
-
 # build app
-BUILDCMD=".maven/bin/mvn -B -Duser.home=$BUILD_DIR -s .m2/settings.xml -DskipTests=true clean install"
+BUILDCMD="$CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | sed -u 's/^/       /'
@@ -53,10 +62,14 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   exit 1
 fi
 
-# repack cache
-mkdir -p $CACHE_DIR
-for DIR in ".m2" ".maven" ; do
-  rm -rf $CACHE_DIR/$DIR
-  cp -r $DIR $CACHE_DIR/$DIR
-done
+# finalize cache
+if [ "false" == $KEEP_M2_CACHE ]; then
+  touch $CACHE_DIR/removeM2Cache
+fi
 
+#copy .m2 and .maven if needed
+if [ "true" == $KEEP_M2_CACHE ]; then
+  for DIR in ".m2" ".maven" ; do
+    cp -r $CACHE_DIR/$DIR $DIR
+  done
+fi
