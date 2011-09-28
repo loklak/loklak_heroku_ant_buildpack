@@ -18,7 +18,7 @@ elif [ -f $CACHE_DIR/removeM2Cache ]; then
 fi
 
 if [ "true" == $KEEP_M2_CACHE ]; then
-  logger "warning: keeping m2 repo and maven in legacy application"
+  logger -p user.notice -t "slugc[$$]" "language_pack_java retain_m2_repo"
 fi
 
 #create the cache dir if it doesn't exist
