@@ -28,17 +28,17 @@ testCompile()
 
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals 0 "${rtrn}"
-  assertEquals "" "`cat ${STD_ERR}`"
+  assertEquals "" "$(cat ${STD_ERR})"
 
-  assertContains "Installing Maven 3.0.3" "`cat ${STD_OUT}`"
+  assertContains "Installing Maven 3.0.3" "$(cat ${STD_OUT})"
   assertTrue "mvn should be executable" "[ -x ${CACHE_DIR}/.maven/bin/mvn ]"
   
-  assertContains "Installing settings.xml" "`cat ${STD_OUT}`"
+  assertContains "Installing settings.xml" "$(cat ${STD_OUT})"
   assertTrue "settings.xml should exist and have content" "[ -s ${CACHE_DIR}/.m2/settings.xml ]"
-  assertNotContains "OLD SETTINGS" "`cat ${CACHE_DIR}/.m2/settings.xml`" # old settings was deleted
+  assertNotContains "OLD SETTINGS" "$(cat ${CACHE_DIR}/.m2/settings.xml)" # old settings was deleted
 
-  assertContains "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install" "`cat ${STD_OUT}`"  
-  assertContains "BUILD SUCCESS" "`cat ${STD_OUT}`"
+  assertContains "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install" "$(cat ${STD_OUT})"  
+  assertContains "BUILD SUCCESS" "$(cat ${STD_OUT})"
 }
 
 testCompileFailed()
@@ -47,29 +47,58 @@ testCompileFailed()
   
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals 1 "${rtrn}"
-  assertContains "Failed to build app with Maven" "`cat ${STD_OUT}`" # Should this be going to STD_ERR??
-  assertEquals "" "`cat ${STD_ERR}`"
+  assertContains "Failed to build app with Maven" "$(cat ${STD_OUT})" # Should this be going to STD_ERR??
+  assertEquals "" "$(cat ${STD_ERR})"
 }
 
-_testCompileKeepM2Cache()
+testNewAppsRemoveM2Cache()
 {
-  fail
-  # logs contain retain_m2_repo
+  createPom
+  rm -r ${CACHE_DIR} # simulate a brand new app without a cache dir
+  
+  assertFalse "Precondition: New apps should not have a CACHE_DIR prior to running" "[ -d ${CACHE_DIR} ]" 
+  assertFalse "Precondition: New apps should not have a removeM2Cache file prior to running" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
+
+  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
+  assertEquals 0 "${rtrn}"
+  assertEquals "" "$(cat ${STD_ERR})"
+
+  assertTrue "removeM2Cache file should now exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
+  assertFalse ".m2 should not be copied to build dir" "[ -d ${BUILD_DIR}/.m2 ]"
+  assertFalse ".maven should not be copied to build dir" "[ -d ${BUILD_DIR}/.maven ]"
 }
 
-_testCompileRemoveM2CacheExplictly()
+testNonLegacyExistingAppsRemoveCache()
 {
-  fail
-  # removeM2Cache file is created
-  # cache is otherwise empty
+  createPom
+  touch ${CACHE_DIR}/removeM2Cache # simulate a previous run with no cache dir
+  
+  assertTrue "Precondition: Existing apps should have a CACHE_DIR from previous run" "[ -d ${CACHE_DIR} ]" 
+  assertTrue "Precondition: Existing apps should have a removeM2Cache file from previous run" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
+
+  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
+  assertEquals 0 "${rtrn}"
+  assertEquals "" "$(cat ${STD_ERR})"
+
+  assertTrue "removeM2Cache file should still exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
+  assertFalse ".m2 should not be copied to build dir" "[ -d ${BUILD_DIR}/.m2 ]"
+  assertFalse ".maven should not be copied to build dir" "[ -d ${BUILD_DIR}/.maven ]"
 }
 
-_testCompileRemoveM2CacheImplictly()
+testLegacyAppsKeepM2Cache()
 {
-  fail
+  createPom
+
+  assertTrue  "Precondition: Legacy apps should have a CACHE_DIR from a previous run" "[ -d ${CACHE_DIR} ]" 
+  assertFalse "Precondition: Legact apps should not have a removeM2Cache file" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
+
+  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
+  assertEquals 0 "${rtrn}"
+  assertEquals "" "$(cat ${STD_ERR})"
+
+  # assertContains "language_pack_java retain_m2_repo" "` cat /var/log/system.log`"
+  assertFalse "removeM2Cache file should not exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
+  assertEquals ".m2 should be copied to build dir" "" "$(diff -r ${CACHE_DIR}/.m2 ${BUILD_DIR}/.m2)"
+  assertEquals ".maven should be copied to build dir" "" "$(diff -r ${CACHE_DIR}/.maven ${BUILD_DIR}/.maven)"
 }
 
-_testExistingSettingsXmlFile()
-{
-  fail
-}
