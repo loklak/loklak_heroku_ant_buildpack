@@ -9,8 +9,8 @@ testDetect()
   capture ${BUILDPACK_HOME}/bin/detect ${BUILD_DIR}
   
   assertEquals 0 ${rtrn}
-  assertEquals "Java" "`cat ${STD_OUT}`"
-  assertNull "`cat ${STD_ERR}`"
+  assertEquals "Java" "$(cat ${STD_OUT})"
+  assertNull "$(cat ${STD_ERR})"
 }
 
 testNoDetectMissingPomFile()
@@ -20,6 +20,6 @@ testNoDetectMissingPomFile()
   capture ${BUILDPACK_HOME}/bin/detect ${BUILD_DIR}
  
   assertEquals 1 ${rtrn}
-  assertEquals "no" "`cat ${STD_OUT}`"
-  assertNull "`cat ${STD_ERR}`"
+  assertEquals "no" "$(cat ${STD_OUT})"
+  assertNull "$(cat ${STD_ERR})"
 }
