@@ -22,10 +22,6 @@ testCompile()
 {
   createPom
 
-  # Create an old settings to make sure it gets replaced with correct one
-  mkdir -p ${CACHE_DIR}/.m2
-  echo "OLD SETTINGS" > ${CACHE_DIR}/.m2/settings.xml
-
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals 0 "${rtrn}"
   assertEquals "" "$(cat ${STD_ERR})"
@@ -35,20 +31,35 @@ testCompile()
   
   assertContains "Installing settings.xml" "$(cat ${STD_OUT})"
   assertTrue "settings.xml should exist and have content" "[ -s ${CACHE_DIR}/.m2/settings.xml ]"
-  assertNotContains "OLD SETTINGS" "$(cat ${CACHE_DIR}/.m2/settings.xml)" # old settings was deleted
-
+  
   assertContains "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install" "$(cat ${STD_OUT})"  
   assertContains "BUILD SUCCESS" "$(cat ${STD_OUT})"
 }
 
-testCompileFailed()
+testCompilationFailure()
 {
   # Don't create POM to fail build
   
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals 1 "${rtrn}"
-  assertContains "Failed to build app with Maven" "$(cat ${STD_OUT})" # Should this be going to STD_ERR??
+  assertContains "Failed to build app with Maven" "$(cat ${STD_OUT})"
   assertEquals "" "$(cat ${STD_ERR})"
+}
+
+testDownloadCaching()
+{
+  createPom
+
+  # simulate a primed cache
+  mkdir -p ${CACHE_DIR}/.maven
+  mkdir -p ${CACHE_DIR}/.m2
+  echo "OLD SETTINGS" > ${CACHE_DIR}/.m2/settings.xml
+
+  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
+
+  assertNotContains "Maven should not be installed again when already cached" "Installing Maven" "$(cat ${STD_OUT})"
+  assertContains "settings.xml should always be installed" "Installing settings.xml" "$(cat ${STD_OUT})"
+  assertNotContains "existing settings.xml file should have been replaced" "OLD SETTINGS" "$(cat ${CACHE_DIR}/.m2/settings.xml)"
 }
 
 testNewAppsRemoveM2Cache()
@@ -90,7 +101,7 @@ testLegacyAppsKeepM2Cache()
   createPom
 
   assertTrue  "Precondition: Legacy apps should have a CACHE_DIR from a previous run" "[ -d ${CACHE_DIR} ]" 
-  assertFalse "Precondition: Legact apps should not have a removeM2Cache file" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
+  assertFalse "Precondition: Legacy apps should not have a removeM2Cache file" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
 
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals 0 "${rtrn}"
