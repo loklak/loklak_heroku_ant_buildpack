@@ -39,9 +39,8 @@ testCompile()
 {
   createPom "$(withDependency)" # including dependency to force use of s3pository.heroku.com
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals 0 "${RETURN}"
-  assertEquals "" "$(cat ${STD_ERR})"
+  compile
+  assertCapturedSuccess
 
   assertContains "Installing Maven 3.0.3" "$(cat ${STD_OUT})"
   assertFileMD5 "605f8b746e16576064258afaf630a2cc"  ${CACHE_DIR}/.maven/bin/mvn
@@ -59,10 +58,8 @@ testCompilationFailure()
 {
   # Don't create POM to fail build
   
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals 1 "${RETURN}"
-  assertContains "Failed to build app with Maven" "$(cat ${STD_OUT})"
-  assertEquals "" "$(cat ${STD_ERR})"
+  compile
+  assertCapturedError "Failed to build app with Maven"
 }
 
 testDownloadCaching()
@@ -74,7 +71,7 @@ testDownloadCaching()
   mkdir -p ${CACHE_DIR}/.m2
   echo "OLD SETTINGS" > ${CACHE_DIR}/.m2/settings.xml
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
+  compile
 
   assertNotContains "Maven should not be installed again when already cached" "Installing Maven" "$(cat ${STD_OUT})"
   assertContains "settings.xml should always be installed" "Installing settings.xml" "$(cat ${STD_OUT})"
@@ -89,9 +86,8 @@ testNewAppsRemoveM2Cache()
   assertFalse "Precondition: New apps should not have a CACHE_DIR prior to running" "[ -d ${CACHE_DIR} ]" 
   assertFalse "Precondition: New apps should not have a removeM2Cache file prior to running" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals 0 "${RETURN}"
-  assertEquals "" "$(cat ${STD_ERR})"
+  compile
+  assertCapturedSuccess
 
   assertTrue "removeM2Cache file should now exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
   assertFalse ".m2 should not be copied to build dir" "[ -d ${BUILD_DIR}/.m2 ]"
@@ -106,9 +102,8 @@ testNonLegacyExistingAppsRemoveCache()
   assertTrue "Precondition: Existing apps should have a CACHE_DIR from previous run" "[ -d ${CACHE_DIR} ]" 
   assertTrue "Precondition: Existing apps should have a removeM2Cache file from previous run" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals 0 "${RETURN}"
-  assertEquals "" "$(cat ${STD_ERR})"
+  compile
+  assertCapturedSuccess
 
   assertTrue "removeM2Cache file should still exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
   assertFalse ".m2 should not be copied to build dir" "[ -d ${BUILD_DIR}/.m2 ]"
@@ -120,11 +115,10 @@ testLegacyAppsKeepM2Cache()
   createPom
 
   assertTrue  "Precondition: Legacy apps should have a CACHE_DIR from a previous run" "[ -d ${CACHE_DIR} ]" 
-  assertFalse "Precondition: Legacy apps should not have a removeM2Cache file" "[ -f ${CACHE_DIR}/removeM2Cache ]" 
+  assertFalse "Precondition: Legacy apps should not have a removeM2Cache file" "[ -f ${CACHE_DIR}/removeM2Cache ]"
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals 0 "${RETURN}"
-  assertEquals "" "$(cat ${STD_ERR})"
+  compile
+  assertCapturedSuccess
 
   # assertContains "language_pack_java retain_m2_repo" "` cat /var/log/system.log`"
   assertFalse "removeM2Cache file should not exist in cache" "[ -f ${CACHE_DIR}/removeM2Cache ]"  
