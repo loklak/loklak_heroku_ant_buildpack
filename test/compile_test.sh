@@ -60,6 +60,7 @@ testCompilationFailure()
   # Don't create POM to fail build
   
   compile
+
   assertCapturedError "Failed to build app with Maven"
 }
 

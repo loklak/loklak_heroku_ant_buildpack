@@ -17,6 +17,7 @@ addons:
 EOF`
 
   release  
+
   assertCapturedSuccess
   assertEquals "${expected_release_output}" "$(cat ${STD_OUT})"
 }
