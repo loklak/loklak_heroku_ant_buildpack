@@ -50,7 +50,7 @@ testCompile()
   assertCaptured "Installing settings.xml" 
   assertFileMD5 "a5fa7b9982fc64939c0e215f935a850a" ${CACHE_DIR}/.m2/settings.xml
   
-  assertFileContains "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install" "${STD_OUT}"  
+  assertCaptured "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install"
   assertCaptured "s3pository.heroku.com" 
   assertCaptured "BUILD SUCCESS" 
 }
@@ -75,9 +75,9 @@ testDownloadCaching()
 
   compile
 
-  assertFileNotContains "Maven should not be installed again when already cached" "Installing Maven" "${STD_OUT}"
+  assertNotCaptured "Maven should not be installed again when already cached" "Installing Maven"
   assertCaptured "settings.xml should always be installed" "Installing settings.xml" 
-  assertNotContains "existing settings.xml file should have been replaced" "OLD SETTINGS" "$(cat ${CACHE_DIR}/.m2/settings.xml)"
+  assertFileNotContains "existing settings.xml file should have been replaced" "OLD SETTINGS" "${CACHE_DIR}/.m2/settings.xml"
 }
 
 testNewAppsRemoveM2Cache()
