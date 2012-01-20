@@ -43,16 +43,16 @@ testCompile()
   
   assertCapturedSuccess
 
-  assertFileContains "Installing Maven 3.0.3" "${STD_OUT}"
+  assertCaptured "Installing Maven 3.0.3"
   assertFileMD5 "605f8b746e16576064258afaf630a2cc"  ${CACHE_DIR}/.maven/bin/mvn
   assertTrue "mvn should be executable" "[ -x ${CACHE_DIR}/.maven/bin/mvn ]"
   
-  assertFileContains "Installing settings.xml" "${STD_OUT}"
+  assertCaptured "Installing settings.xml" 
   assertFileMD5 "a5fa7b9982fc64939c0e215f935a850a" ${CACHE_DIR}/.m2/settings.xml
   
   assertFileContains "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install" "${STD_OUT}"  
-  assertFileContains "s3pository.heroku.com" "${STD_OUT}"
-  assertFileContains "BUILD SUCCESS" "${STD_OUT}"
+  assertCaptured "s3pository.heroku.com" 
+  assertCaptured "BUILD SUCCESS" 
 }
 
 testCompilationFailure()
@@ -76,7 +76,7 @@ testDownloadCaching()
   compile
 
   assertFileNotContains "Maven should not be installed again when already cached" "Installing Maven" "${STD_OUT}"
-  assertFileContains "settings.xml should always be installed" "Installing settings.xml" "${STD_OUT}"
+  assertCaptured "settings.xml should always be installed" "Installing settings.xml" 
   assertNotContains "existing settings.xml file should have been replaced" "OLD SETTINGS" "$(cat ${CACHE_DIR}/.m2/settings.xml)"
 }
 
