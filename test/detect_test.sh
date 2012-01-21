@@ -5,21 +5,24 @@
 testDetect()
 {
   touch ${BUILD_DIR}/pom.xml
-  
-  capture ${BUILDPACK_HOME}/bin/detect ${BUILD_DIR}
-  
-  assertEquals 0 ${rtrn}
-  assertEquals "Java" "$(cat ${STD_OUT})"
-  assertNull "$(cat ${STD_ERR})"
+
+  detect
+
+  assertAppDetected "Java"
 }
 
 testNoDetectMissingPomFile()
 {
-  touch ${BUILD_DIR}/build.xml
+  detect
 
-  capture ${BUILDPACK_HOME}/bin/detect ${BUILD_DIR}
- 
-  assertEquals 1 ${rtrn}
-  assertEquals "no" "$(cat ${STD_OUT})"
-  assertNull "$(cat ${STD_ERR})"
+  assertNoAppDetected
+}
+
+testNoDetectPomFileAsDir()
+{
+  mkdir -p ${BUILD_DIR}/pom.xml
+
+  detect
+
+  assertNoAppDetected
 }
