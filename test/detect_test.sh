@@ -4,23 +4,23 @@
 
 testDetect()
 {
-  touch ${BUILD_DIR}/pom.xml
+  touch ${BUILD_DIR}/build.xml
 
   detect
 
   assertAppDetected "Java"
 }
 
-testNoDetectMissingPomFile()
+testNoDetectMissingBuildFile()
 {
   detect
 
   assertNoAppDetected
 }
 
-testNoDetectPomFileAsDir()
+testNoDetectBuildFileAsDir()
 {
-  mkdir -p ${BUILD_DIR}/pom.xml
+  mkdir -p ${BUILD_DIR}/build.xml
 
   detect
 

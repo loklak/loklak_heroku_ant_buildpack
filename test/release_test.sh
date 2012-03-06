@@ -9,12 +9,12 @@ testRelease()
 config_vars:
   PATH: /usr/local/bin:/usr/bin:/bin
   JAVA_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops
-  MAVEN_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops 
+  ANT_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops 
 addons:
   shared-database:5mb
 
 
-EOF`
+EOF
 
   release  
 
