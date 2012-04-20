@@ -4,29 +4,43 @@
 # fail fast
 set -e
 
+. $(dirname $0)/common
+
+
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 # parse args
 BUILD_DIR=$1
 CACHE_DIR=$2
-ANT_VER="1.8.3"
 
-#if [ "true" == $KEEP_M2_CACHE ]; then
-#  logger -p user.notice -t "slugc[$$]" "language_pack_java retain_m2_repo"
-#fi
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+VENDORING_DIR="$BUILD_DIR/.buildpack"
+ANT_DIR="$VENDORING_DIR/apache-ant-$ANT_VER"
 
 #create the cache dir if it doesn't exist
-mkdir -p $CACHE_DIR
+mkdir -p $VENDORING_DIR
 
-# change to cache dir to install apache ant
-cd $CACHE_DIR
+# change to vendoring dir to install apache ant
+cd $VENDORING_DIR
 
-# install ant with base repository
+# install ant from base repository
 ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
 
-echo -n "-----> Installing Apache Ant $ANT_VER....."
-curl --silent --max-time 60 --location $ANT_URL | tar xz
-chmod +x apache-ant-$ANT_VER/bin/ant
-echo " done"
+if [ -x $ANT_DIR/bin/ant ] ; then
+    #assuming Apache Ant is already installed...
+	echo "-----> Using Apache Ant $ANT_VER....."
+else
+	echo -n "-----> Installing Apache Ant $ANT_VER....."
+	curl --silent --max-time 60 --location $ANT_URL | tar xz
+	chmod +x $ANT_DIR/bin/ant
+	echo "done!"
+fi
 
 # change to build dir to run ant
 cd $BUILD_DIR
@@ -34,13 +48,12 @@ cd $BUILD_DIR
 export ANT_OPTS="-Xmx512m"
 
 # build app
-BUILDCMD="$CACHE_DIR/apache-ant-$ANT_VER/bin/ant -Duser.home=$BUILD_DIR clean install"
+BUILDCMD="$ANT_DIR/bin/ant -Duser.home=$BUILD_DIR clean install"
 echo "-----> executing $BUILDCMD"
 
-$BUILDCMD 2>&1 | sed -u 's/^/       /'
+$BUILDCMD 2>&1 | indent
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Ant"
   exit 1
 fi
-

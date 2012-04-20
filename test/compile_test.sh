@@ -29,9 +29,9 @@ testCompile()
   assertCapturedSuccess
 
   assertCaptured "Installing Apache Ant 1.8.3"
-  assertTrue "ant should be executable" "[ -x ${CACHE_DIR}/apache-ant-1.8.3/bin/ant ]"
+  assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant ]"
   
-  assertCaptured "executing ${CACHE_DIR}/apache-ant-1.8.3/bin/ant clean install"
+  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant clean install"
   assertCaptured "BUILD SUCCESS" 
 }
 

@@ -1,0 +1,2 @@
+ANT_VER="1.8.3"
+ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
