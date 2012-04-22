@@ -13,14 +13,14 @@ Example usage:
     Procfile	build.xml	libs		src
 
     $ heroku create --stack cedar --buildpack http://github.com/dennisg/heroku-buildpack-ant.git
-
+    
     $ git push heroku master
     ...
------> Heroku receiving push
------> Fetching custom buildpack... done
------> Java (using Apache Ant 1.8.3) app detected
------> Installing Apache Ant 1.8.3.....done!
------> executing /tmp/build_1i100c5e7xm9u/.buildpack/apache-ant-1.8.3/bin/ant -Duser.home=/tmp/build_1i100c5e7xm9u clean install
+	-----> Heroku receiving push
+	-----> Fetching custom buildpack... done
+	-----> Java (using Apache Ant 1.8.3) app detected
+	-----> Installing Apache Ant 1.8.3.....done!
+	-----> executing /tmp/build_1i100c5e7xm9u/.buildpack/apache-ant-1.8.3/bin/ant -Duser.home=/tmp/build_1i100c5e7xm9u clean install
        Buildfile: /tmp/build_1i100c5e7xm9u/build.xml
        
        clean:
@@ -40,11 +40,11 @@ Example usage:
        
        BUILD SUCCESSFUL
        Total time: 0 seconds
------> Discovering process types
-       Procfile declares types -> web
------> Compiled slug size is 5.6MB
------> Launching... done, v5
-       http://<your-app-name>.herokuapp.com deployed to Heroku
+	-----> Discovering process types
+    Procfile declares types -> web
+	-----> Compiled slug size is 5.6MB
+	-----> Launching... done, v5
+    http://<your-app-name>.herokuapp.com deployed to Heroku
 
 The buildpack will detect your app as Java (using Apache Ant) if it has the file 'build.xml' in the root. It will use Apache Ant to execute the targets 'clean install' defined by your build.xml.
 

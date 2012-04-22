@@ -20,6 +20,9 @@ function indent() {
   esac
 }
 
+# BUILD_DIR is (during this stage) a temporary directory. During execution
+# of your slug it'll be known as '/app'.
+
 VENDORING_DIR="$BUILD_DIR/.buildpack"
 ANT_DIR="$VENDORING_DIR/apache-ant-$ANT_VER"
 
