@@ -8,7 +8,7 @@ testDetect()
 
   detect
 
-  assertAppDetected "Java"
+  assertAppDetected "Java (using Apache Ant 1.8.3)"
 }
 
 testNoDetectMissingBuildFile()

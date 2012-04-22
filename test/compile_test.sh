@@ -22,7 +22,8 @@ EOF
 
 testCompile()
 {
-  createBuildFile "$(withDependency)"
+
+  createBuildFile
 
   compile
   
@@ -31,7 +32,8 @@ testCompile()
   assertCaptured "Installing Apache Ant 1.8.3"
   assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant ]"
   
-  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant clean install"
+  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant"
+  assertCaptured "clean install"
   assertCaptured "BUILD SUCCESS" 
 }
 

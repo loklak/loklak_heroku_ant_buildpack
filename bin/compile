@@ -45,6 +45,12 @@ else
 	echo "done!"
 fi
 
+
+if [ ! -f $BUILD_DIR/build.xml ] ; then
+	echo "Failed to build app with Apache Ant"
+fi
+
+
 # change to build dir to run ant
 cd $BUILD_DIR
 

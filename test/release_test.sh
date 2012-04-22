@@ -14,7 +14,7 @@ addons:
   shared-database:5mb
 
 
-EOF
+EOF`
 
   release  
 
