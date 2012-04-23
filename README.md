@@ -50,7 +50,7 @@ The buildpack will detect your app as Java (using Apache Ant) if it has the file
 
 The Ant executable is unpacked inside your slug directory in '.buildpack' and is therefore also available for running the actual Java application too (I added its bin folder to the PATH).
 
-Example Procile:
+Example Procfile:
 
 	web: ant run
 
