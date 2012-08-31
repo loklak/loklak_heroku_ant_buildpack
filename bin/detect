@@ -2,7 +2,7 @@
 # bin/detect <build-dir>
 
 if [ -f $1/build.xml ]; then
-   echo "Java (using Apache Ant 1.8.3)" && exit 0
+   echo "Java (using Apache Ant 1.8.4)" && exit 0
 else
   echo "no" && exit 1
 fi
