@@ -40,7 +40,7 @@ if [ -x $ANT_DIR/bin/ant ] ; then
 	echo "-----> Using Apache Ant $ANT_VER....."
 else
 	echo -n "-----> Installing Apache Ant $ANT_VER....."
-	curl --silent --max-time 60 --location $ANT_URL | tar xz
+	curl --max-time 180 --location $ANT_URL | tar xz
 	chmod +x $ANT_DIR/bin/ant
 	echo "done!"
 fi
