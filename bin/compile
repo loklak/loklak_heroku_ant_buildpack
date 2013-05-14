@@ -39,10 +39,10 @@ if [ -x $ANT_DIR/bin/ant ] ; then
     #assuming Apache Ant is already installed...
 	echo "-----> Using Apache Ant $ANT_VER....."
 else
-	echo -n "-----> Installing Apache Ant $ANT_VER....."
+	echo "-----> Installing Apache Ant $ANT_VER..... [start]"
 	curl --max-time 180 --location $ANT_URL | tar xz
 	chmod +x $ANT_DIR/bin/ant
-	echo "done!"
+	echo "-----> Installing Apache Ant $ANT_VER..... [done ]!"
 fi
 
 
