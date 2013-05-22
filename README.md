@@ -59,6 +59,7 @@ Config Update
 If you have been using this buildpack before, the upgrade from 1.9.0 to 1.9.1 now requires a heroku config update.
 
 Please issue:
+
 	heroku config:set ANT_HOME=.buildpack/apache-ant-1.9.1
 	heroku config:set PATH=/usr/local/bin:/usr/bin:/bin:.buildpack/apache-ant-1.9.1/bin
 
