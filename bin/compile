@@ -32,8 +32,8 @@ mkdir -p $VENDORING_DIR
 # change to vendoring dir to install apache ant
 cd $VENDORING_DIR
 
-# install ant from base repository
-ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
+# install ant from the base (archive) repository (which is defined in bin/common)
+# ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
 
 if [ -x $ANT_DIR/bin/ant ] ; then
     #assuming Apache Ant is already installed...
