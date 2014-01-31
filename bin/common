@@ -5,4 +5,4 @@ ANT_VER="1.9.3"
 ANT_URL="http://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
 
 VENDORING_DIR="$BUILD_DIR/.buildpack"
-ANT_HOME=$VENDORING_DIR/apache-ant-$ANT_VER
+ANT_HOME=.buildpack/apache-ant-$ANT_VER
