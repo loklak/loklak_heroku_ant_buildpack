@@ -8,8 +8,8 @@ set -e
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-# BUILD_DIR is (during this stage) a temporary directory. During execution
-# of your slug it'll be known as '/app'.
+# <BUILD_DIR> is (during this stage) a temporary directory. 
+# During execution of your slug it'll be known as '/app'.
 
 
 . $(dirname $0)/common
@@ -49,15 +49,18 @@ fi
 
 
 # change to build dir to run ant
-cd $BUILD_DIR
+cd ${BUILD_DIR}
 
 export ANT_OPTS="-Xmx512m"
 
 # build app
-BUILDCMD="$ANT_HOME/bin/ant -Duser.home=$BUILD_DIR clean install"
+BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
+ls -al ${PWD}  | indent
+
+ls -al ${BUILD_DIR}  | indent
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to build app with Apache Ant"
