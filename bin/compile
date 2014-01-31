@@ -32,9 +32,6 @@ mkdir -p $VENDORING_DIR
 # change to vendoring dir to install apache ant
 cd $VENDORING_DIR
 
-# install ant from the base (archive) repository (which is defined in bin/common)
-# ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
-
 if [ -x $ANT_HOME/bin/ant ] ; then
     #assuming Apache Ant is already installed...
 	echo "-----> Using Apache Ant $ANT_VER....."
@@ -57,7 +54,7 @@ cd $BUILD_DIR
 export ANT_OPTS="-Xmx512m"
 
 # build app
-BUILDCMD="$ANT_DIR/bin/ant -Duser.home=$BUILD_DIR clean install"
+BUILDCMD="$ANT_HOME/bin/ant -Duser.home=$BUILD_DIR clean install"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
