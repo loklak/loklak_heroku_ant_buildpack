@@ -10,8 +10,6 @@ ANT_HOME="/app/.buildpack/apache-ant-${ANT_VER}"
 
 cat <<EOF
 ---
-default_process_types:
-    web: ant run
 config_vars:
     - ANT_HOME: "${ANT_HOME}"
     - PATH: "/usr/local/bin:/usr/bin:/bin:${ANT_HOME}/bin"
@@ -19,6 +17,8 @@ config_vars:
     = ANT_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops
 addons:
     - shared-database:5mb
+default_process_types:
+    web: ant run
 
 
 EOF
