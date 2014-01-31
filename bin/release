@@ -6,7 +6,7 @@ BUILD_DIR="$1"
 . $(dirname $0)/common
 
 #here, we need to override the ANT_HOME variable
-ANT_HOME=".buildpack/apache-ant-${ANT_VER}"
+ANT_HOME="/app/.buildpack/apache-ant-${ANT_VER}"
 
 cat <<EOF
 ---
