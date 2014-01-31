@@ -60,6 +60,6 @@ echo "-----> executing $BUILDCMD"
 $BUILDCMD 2>&1 | indent
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
-  echo " !     Failed to build app with Ant"
+  echo " !     Failed to build app with Apache Ant"
   exit 1
 fi
