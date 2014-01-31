@@ -2,6 +2,8 @@
 
 . ${BUILDPACK_TEST_RUNNER_HOME}/lib/test_utils.sh
 
+. ${BUILDPACK_HOME}/bin/common
+
 createBuildFile()
 {
   cat > ${BUILD_DIR}/build.xml <<EOF
@@ -29,10 +31,10 @@ testCompile()
   
   assertCapturedSuccess
 
-  assertCaptured "Installing Apache Ant 1.8.3"
-  assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant ]"
+  assertCaptured "Installing Apache Ant 1.9.3"
+  assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.9.3/bin/ant ]"
   
-  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.8.3/bin/ant"
+  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.9.3/bin/ant"
   assertCaptured "clean install"
   assertCaptured "BUILD SUCCESS" 
 }

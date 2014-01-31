@@ -4,13 +4,18 @@
 # fail fast
 set -e
 
+# parse args
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# BUILD_DIR is (during this stage) a temporary directory. During execution
+# of your slug it'll be known as '/app'.
+
+
 . $(dirname $0)/common
 
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
-# parse args
-BUILD_DIR=$1
-CACHE_DIR=$2
 
 function indent() {
   c='s/^/       /'
@@ -20,11 +25,6 @@ function indent() {
   esac
 }
 
-# BUILD_DIR is (during this stage) a temporary directory. During execution
-# of your slug it'll be known as '/app'.
-
-VENDORING_DIR="$BUILD_DIR/.buildpack"
-ANT_DIR="$VENDORING_DIR/apache-ant-$ANT_VER"
 
 #create the cache dir if it doesn't exist
 mkdir -p $VENDORING_DIR
@@ -35,13 +35,13 @@ cd $VENDORING_DIR
 # install ant from the base (archive) repository (which is defined in bin/common)
 # ANT_URL="http://apache.mirror1.spango.com/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
 
-if [ -x $ANT_DIR/bin/ant ] ; then
+if [ -x $ANT_HOME/bin/ant ] ; then
     #assuming Apache Ant is already installed...
 	echo "-----> Using Apache Ant $ANT_VER....."
 else
 	echo "-----> Installing Apache Ant $ANT_VER..... [start]"
 	curl --max-time 180 --location $ANT_URL | tar xz
-	chmod +x $ANT_DIR/bin/ant
+	chmod +x $ANT_HOME/bin/ant
 	echo "-----> Installing Apache Ant $ANT_VER..... [done ]!"
 fi
 

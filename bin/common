@@ -1,3 +1,10 @@
+#this file is sourced from bin/detect, bin/compile and bin/release
+# it is assumed that <BUILD_DIR> is set before this file is sourced.
+
+echo "Currently, <BUILD_DIR> = $BUILD_DIR"
+
 ANT_VER="1.9.3"
 ANT_URL="http://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
-ANT_HOME=.buildpack/apache-ant-$ANT_VER
+
+VENDORING_DIR="$BUILD_DIR/.buildpack"
+ANT_HOME=$VENDORING_DIR/apache-ant-$ANT_VER
