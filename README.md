@@ -9,6 +9,7 @@ Usage
 This buildpack is meant to be used in conjuction with Loklak server only. If you want to run any other application with Ant on Heroku, check out https://github.com/dennisg/heroku-buildpack-ant
 
 In your project directory:
+
 1. Clone the Loklak server (if not already) : `git clone https://github.com/loklak/loklak_server.git`
 2. Create a heroku app: `heroku create`
 3. Set the buildpack: `heroku buildpacks:set https://github.com/aneeshd16/heroku-buildpack-ant-loklak.git`
