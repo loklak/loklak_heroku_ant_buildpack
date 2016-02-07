@@ -16,5 +16,5 @@ config_vars:
     JAVA_OPTS: "-Xmx384m -Xss512k -XX:+UseCompressedOops"
     ANT_OPTS: "-Xmx384m -Xss512k -XX:+UseCompressedOops"
 default_process_types:
-    web: sh bin/start.sh
+    web: sh bin/heroku_start.sh
 EOF
