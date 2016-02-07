@@ -18,5 +18,5 @@ config_vars:
 addons:
     shared-database: 5mb
 default_process_types:
-    web: ant run
+    web: sh bin/start.sh
 EOF
