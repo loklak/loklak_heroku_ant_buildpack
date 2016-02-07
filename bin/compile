@@ -54,7 +54,7 @@ cd ${BUILD_DIR}
 export ANT_OPTS="-Xmx512m"
 
 # build app
-BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} clean install"
+BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR}"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
