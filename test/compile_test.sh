@@ -31,10 +31,10 @@ testCompile()
   
   assertCapturedSuccess
 
-  assertCaptured "Installing Apache Ant 1.9.3"
-  assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.9.3/bin/ant ]"
+  assertCaptured "Installing Apache Ant 1.9.7"
+  assertTrue "ant should be executable" "[ -x ${BUILD_DIR}/.buildpack/apache-ant-1.9.7/bin/ant ]"
   
-  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.9.3/bin/ant"
+  assertCaptured "executing ${BUILD_DIR}/.buildpack/apache-ant-1.9.7/bin/ant"
   assertCaptured "clean install"
   assertCaptured "BUILD SUCCESS" 
 }

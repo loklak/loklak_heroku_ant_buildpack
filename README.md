@@ -2,7 +2,7 @@ Heroku buildpack for Loklak: Java (with Apache Ant)
 ===================================================
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) made specifically for the [Loklak server](https://github.com/loklak/loklak_server). Forked from https://github.com/dennisg/heroku-buildpack-ant (Thanks!)
-It uses Apache Ant 1.9.3 to build your application and OpenJDK 1.6.0_27 (currently) to run it.
+It uses Apache Ant 1.9.7 to build your application and OpenJDK 1.8 (currently) to run it.
 
 Usage
 -----
