@@ -1,7 +1,7 @@
 #this file is sourced from bin/detect, bin/compile and bin/release
 # it is assumed that <BUILD_DIR> is set before this file is sourced.
 
-ANT_VER="1.9.7"
+ANT_VER="1.9.8"
 ANT_URL="http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/ant/binaries/apache-ant-$ANT_VER-bin.tar.gz"
 
 VENDORING_DIR="$BUILD_DIR/.buildpack"
